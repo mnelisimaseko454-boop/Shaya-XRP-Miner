@@ -1,0 +1,12 @@
+{
+  "name": "shaya-xrp-miner",
+  "version": "2.0.0",
+  "description": "Shaya XRP Miner - Profitable Version - Boost 2 diamonds, FREE 2000 min, VIP 1000 min",
+  "main": "index.js",
+  "scripts": { "start": "node index.js" },
+  "dependencies": {
+    "express": "^4.19.2",
+    "node-telegram-bot-api": "^0.66.0",
+    "cors": "^2.8.5"
+  }
+}
