@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shaya XRP Miner</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://ad.gigapub.tech/script?id=9114"></script>
+<script src="https://js.onclckvd.com/in-stream-ad-admanager/tma.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  if(!window.loadOfferWallSDK){
+    const s=document.createElement('script'); s.src='https://wall.giga.pub/api/v1/loader.js?projectId=9114'; s.async=true; document.head.appendChild(s);
+  }
+});
+</script>
+<script>
+var ONCLICKA_SPOT_ID="472254"; var GIGA_APP_ID="9114";
+var adClickCount=0, onclickaShow=null, gigaOfferWallSDK=null;
+window.initCdTma?.({id:'472254'}).then(show=>{window.show=show; onclickaShow=show;}).catch(e=>console.log('OnclickA fail',e));
+(window.loadGigaSDKCallbacks||(window.loadGigaSDKCallbacks=[])).push(()=>{
+  window.loadOfferWallSDK({projectId:'9114'}).then(sdk=>{
+    window.gigaOfferWallSDK=sdk; gigaOfferWallSDK=sdk;
+    sdk.on('rewardClaim', async(data)=>{ await fetch('/api/collect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:parseInt(userId)})}); alert('🎉 Offerwall: +'+data.amount+' credited!'); load(); });
+  }).catch(e=>console.error(e));
+});
+function openOfferWall(){ if(window.gigaOfferWallSDK) window.gigaOfferWallSDK.open(); else alert('Offerwall loading... wait 3 sec'); }
+function closeOfferWall(){ if(window.gigaOfferWallSDK) window.gigaOfferWallSDK.close(); }
+async function triggerAdNetworks(){
+  adClickCount++;
+  if(adClickCount%2===1){ if(!(await tryOnclickA())) await tryGiga(); }
+  else { if(!(await tryGiga())) await tryOnclickA(); }
+}
+async function tryOnclickA(){ try{ if(onclickaShow){ await onclickaShow(); return true; } if(window.show){ await window.show(); return true; } return false; }catch(e){ return false; } }
+async function tryGiga(){ try{ if(window.showGiga){ await window.showGiga(); return true; } return false; }catch(e){ return false; } }
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#8fbf8f;padding:12px;padding-bottom:80px;color:#000}
+.card{background:#fff;border-radius:18px;padding:14px;margin-top:10px}
+h1{font-size:20px;text-align:center}
+.balance{font-size:20px;font-weight:900}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.grid button,.wide{border:none;background:#5a9e5a;color:#fff;padding:14px;border-radius:12px;font-weight:900;font-size:15px;cursor:pointer}
+.wide{width:100%;margin-top:8px}
+.robot{background:#fff;border-radius:16px;padding:10px;margin-top:12px;text-align:center}
+.robot img{width:100%;border-radius:12px}
+.hire{background:#5a9e5a;color:#fff;border:none;width:100%;padding:12px;border-radius:10px;font-weight:900;margin-top:6px}
+.vip{background:linear-gradient(135deg,#FFD700,#ff8c00);border-radius:16px;padding:14px;margin-top:12px;color:#000}
+.vipcard{background:#fff;border-radius:12px;padding:12px;margin-top:8px}
+.offerbox{background:linear-gradient(135deg,#7b2fff,#00c6ff);border-radius:16px;padding:14px;margin-top:12px;color:#fff}
+.offerbox button{background:#FFD700;color:#000;border:none;padding:12px;border-radius:10px;font-weight:900;width:100%;margin-top:8px}
+input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #ccc;background:#fff;margin-top:8px}
+.hidden{display:none!important}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#111;color:#fff;display:flex;justify-content:space-around;padding:12px}
+.nav div{cursor:pointer;text-align:center;font-size:12px}
+</style></head><body>
+<h1>Shaya XRP Miner 🤖</h1>
+
+<div id="page-home">
+<div class="card"><div class="balance" id="dash">Loading...</div><p>1 XRP ~ 1.0636 $ | 1000 💎 = 1 XRP | Boost = +2 💎 / ad</p><p id="vipLine"></p></div>
+<div class="grid"><button onclick="watchAdBoost()">🔥 Boost (+2 💎)</button><button onclick="showPage('home')">⚡ Factory</button><button onclick="showPage('shop')">🏪 Shop</button></div>
+<div style="display:flex;gap:8px;margin-top:8px"><button class="wide" style="flex:1" onclick="addDiamonds()">💎 Add</button><button class="wide" style="flex:1" onclick="showPage('withdraw')">📩 Withdraw</button></div>
+<button class="wide" onclick="doInvite()">👥 Invite friends</button>
+<div style="display:flex;gap:8px"><button class="wide" onclick="doBonus()">🎁 Bonus</button><button class="wide" onclick="alert('Extra: Bonus + Invite + Factory + Boost +2 diamonds per ad')">✨ Extra</button></div>
+
+<div class="offerbox"><b>🎯 OFFERWALL - Earn More</b><p style="font-size:13px">Complete offers → Get Diamonds</p><button onclick="openOfferWall()">🎁 OPEN OFFERS & EARN</button><button onclick="closeOfferWall()" style="background:#222;color:#fff">Close Wall</button></div>
+
+<div class="vip"><h3>👑 VIP PLANS - 30 DAYS - PAY WITH ⭐ STARS</h3><p>2x - 8x Mining Boost • Min Withdraw 1000 💎 (FREE = 2000 💎)</p><div id="vipPlansList"></div></div>
+
+<div id="factory"></div>
+<div class="card"><b>🏆 Leaderboard</b><div id="board">Loading...</div></div>
+</div>
+
+<div id="page-withdraw" class="hidden"><div class="card"><h3>💸 WITHDRAW</h3>
+<p id="withdrawInfo">Min: FREE 2000 💎 | VIP 1000 💎 | ≤2 XRP Auto | >2 XRP Review</p>
+<p id="withdrawUSDTInfo" style="color:#00a651">Your balance: 0 💎</p>
+<select id="withdrawMethod" onchange="updateWithdrawInfo()">
+<option value="Dollars (USDT) - Walt">💵 Dollars (USDT) - Walt</option>
+<option value="Gram - Walt">👛 Gram - Walt</option>
+<option value="Capitec / Bank">🏦 Capitec / Bank</option>
+<option value="Airtime">📱 Airtime</option>
+</select>
+<input id="walletInput" placeholder="Paste your Walt Dollars address - starts with UQ...">
+<div style="background:#e6ffe6;border:1px solid #00aa55;border-radius:10px;padding:10px;margin-top:8px;font-size:12px" id="withdrawHintBox"><b id="withdrawHintTitle">💵 Dollars (USDT) - Walt</b><p id="withdrawHint">In Walt: Tap Dollars > Deposit > Copy UQ... address. NOT T... (TRC20 NOT accepted).</p></div>
+<button class="wide" onclick="requestWithdraw()">✅ REQUEST WITHDRAWAL</button>
+<p id="withdrawStatus" style="margin-top:8px;color:#0a0"></p>
+<p style="font-size:11px;color:#666;margin-top:8px">Min FREE 2000 💎 • VIP 1000 💎 • Boost = +2 💎 per ad • ≤2 XRP Auto • >2 XRP Manual Review • Admin pays in 24h</p>
+</div></div>
+
+<div id="page-shop" class="hidden"><div class="card"><h3>🏪 SHOP</h3><p>100 💎 = Free demo<br>1000 💎 = 1 XRP<br>Hire robots to earn faster.<br><br>FREE Min Withdraw 2000 💎<br>VIP Min Withdraw 1000 💎</p><button class="wide" onclick="addDiamonds()">💎 Add Diamonds</button></div></div>
+
+<div class="nav"><div onclick="showPage('home')">🏠<br>Home</div><div onclick="showPage('withdraw')">💸<br>Withdraw</div><div onclick="showPage('shop')">🏪<br>Shop</div></div>
+
+<script>
+let userId = new URLSearchParams(location.search).get('start') || (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) || new URLSearchParams(location.search).get('user_id');
+let user=null, robotsList={}, vipPlans={};
+if(window.Telegram?.WebApp){ Telegram.WebApp.ready(); Telegram.WebApp.expand(); }
+async function load(){
+  if(!userId){ document.getElementById('dash').innerHTML='<a href="https://t.me/ShayaXRPMinerBot">👉 TAP HERE TO OPEN IN BOT</a>'; return; }
+  let r=await fetch('/api/user/'+userId); user=await r.json(); robotsList=user.robotsList; vipPlans=user.vipPlans;
+  document.getElementById('dash').innerHTML=`👤 DASHBOARD<br>⬜ Available: ${user.diamonds} 💎<br>⬜ Payment: ${user.payment} 💎<br>⬜ Payed out: ${user.paidOut.toFixed(2)} XRP<br>⚡ ${user.energy} Energy | ${user.perHour}/hour<br>Min Withdraw: ${user.minWithdraw} 💎`;
+  document.getElementById('vipLine').innerText = user.vipActive ? `👑 ${user.vip_level} ACTIVE until ${user.vip_until} | Min Withdraw 1000 💎` : `👑 FREE - Min Withdraw 2000 💎 | Upgrade to VIP for 1000 💎 min + 2x-8x Mining`;
+  document.getElementById('withdrawInfo').innerText=`Min: ${user.minWithdraw} 💎 = ${(user.minWithdraw/1000).toFixed(1)} XRP (${user.vipActive?'VIP':'FREE - Buy VIP for 1000 💎 min'}) | ≤2 XRP Auto | >2 XRP Review`;
+  document.getElementById('withdrawUSDTInfo').innerText=`Your balance: ${user.diamonds} 💎 = ${(user.diamonds/1000).toFixed(2)} XRP | Need ${user.minWithdraw} 💎 to withdraw`;
+  let lb=await fetch('/api/leaderboard'); let list=await lb.json();
+  document.getElementById('board').innerHTML=list.map((u,i)=>`${i+1}. ${u.first_name} - ${u.diamonds} 💎 ${u.vip_level!=='FREE'?'👑':''}`).join('<br>');
+  document.getElementById('vipPlansList').innerHTML = Object.keys(vipPlans).map(k=>{
+    let p=vipPlans[k]; let active = user.vip_level===k && user.vipActive;
+    return `<div class="vipcard"><b>👑 ${k} ${active?'✅ ACTIVE':''}</b><br><small>${p.perHourBoost}x Mining • 30 Days • Min Withdraw 1000 💎 (FREE = 2000 💎)</small><br><b>⭐ ${p.stars} Stars</b><br><button class="hire" onclick="buyVip('${k}')">⭐ BUY ${k} - ${p.stars} STARS</button></div>`;
+  }).join('');
+  showFactory();
+}
+function showFactory(){
+  if(!robotsList) return;
+  document.getElementById('factory').innerHTML = Object.keys(robotsList).map(k=>{
+    let ro=robotsList[k];
+    return `<div class="robot"><img src="${ro.img}"><b>🤖 ${ro.name}</b><p>⬛ Energy per hour: ${ro.energy} ⚡</p><p>⬛ Hired Units: ${user.robots[k]||0}</p><p>⬛ Price: ${ro.price} 💎</p><button class="hire" onclick="hire('${k}')">Hire</button></div>`;
+  }).join('');
+}
+async function hire(k){
+  let r=await fetch('/api/hire',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:parseInt(userId),robot:k})});
+  let d=await r.json(); alert(d.success?`✅ Hire ${robotsList[k].name}`:d.error); load();
+}
+async function buyVip(plan){
+  let r=await fetch('/api/vip-stars-invoice',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:parseInt(userId),plan})});
+  let d=await r.json();
+  if(d.success){ alert(`✅ Check Telegram chat! Bot sent invoice for ${d.stars} ⭐ for ${plan}. Tap PAY in chat. You get Min Withdraw 1000 💎 instead of 2000 💎`); try{ window.Telegram.WebApp.openTelegramLink('https://t.me/ShayaXRPMinerBot'); }catch(e){} }
+  else alert(d.error||'Could not create Stars invoice');
+}
+async function watchAdBoost(){
+  document.getElementById('dash').innerText='⏳ Loading Ad... Watch full ad to get +2 💎';
+  await triggerAdNetworks();
+  setTimeout(async()=>{
+    let r=await fetch('/api/boost',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:parseInt(userId)})});
+    let d=await r.json(); alert(`⚡ Boosted! +${d.earned} 💎 (Ad watched)`); load();
+  },3000);
+}
+function addDiamonds(){ alert('💎 Tap Boost (+2 per ad) / Factory / Offerwall to earn. Demo +10 in Bot chat.'); }
+function doInvite(){ alert('Your link:\nhttps://t.me/ShayaXRPMinerBot?start=ref_'+userId); }
+async function doBonus(){
+  let r=await fetch('/api/bonus',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:parseInt(userId)})});
+  let d=await r.json(); alert(d.success?'🎁 +50 💎':d.error); load();
+}
+function showPage(p){
+  document.getElementById('page-home').classList.toggle('hidden',p!=='home');
+  document.getElementById('page-withdraw').classList.toggle('hidden',p!=='withdraw');
+  document.getElementById('page-shop').classList.toggle('hidden',p!=='shop');
+  if(p==='withdraw') updateWithdrawInfo();
+}
+function updateWithdrawInfo(){
+  const m=document.getElementById('withdrawMethod').value;
+  const walletInput=document.getElementById('walletInput'); const hintEl=document.getElementById('withdrawHint'); const hintTitle=document.getElementById('withdrawHintTitle');
+  if(m==='Dollars (USDT) - Walt'){ walletInput.placeholder='Paste your Walt Dollars address - starts with UQ...'; hintTitle.innerText='💵 Dollars (USDT) - Walt'; hintEl.innerText='In Walt: Tap Dollars > Deposit > Copy UQ... address. NOT T... (TRC20 NOT accepted).'; }
+  else if(m==='Gram - Walt'){ walletInput.placeholder='Paste your Walt Gram address - starts with UQ...'; hintTitle.innerText='👛 Gram - Walt'; hintEl.innerText='In Walt: Tap Gram > Deposit > Copy UQ... address. Payout sent as GRAM.'; }
+  else if(m==='Capitec / Bank'){ walletInput.placeholder='Enter Capitec / Bank Account Number + Name'; hintTitle.innerText='🏦 Capitec / Bank'; hintEl.innerText='Bank transfer - slower than Walt'; }
+  else if(m==='Airtime'){ walletInput.placeholder='Enter Phone Number for Airtime e.g. 071...'; hintTitle.innerText='📱 Airtime'; hintEl.innerText='Airtime payout to your number'; }
+}
+async function requestWithdraw(){
+  const method=document.getElementById('withdrawMethod').value;
+  const wallet=document.getElementById('walletInput').value.trim();
+  if(!wallet) return alert('Enter your wallet first');
+  if((method==='Dollars (USDT) - Walt' || method==='Gram - Walt') && !wallet.startsWith('UQ')){
+    return alert('❌ Wrong address!\n\nWalt addresses start with UQ...\nYou pasted: '+wallet.slice(0,12)+'...\n\nTRC20 (T...) is NOT accepted.\nGo to Walt > Dollars > Deposit > Copy UQ... address.');
+  }
+  let r=await fetch('/api/withdraw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:parseInt(userId),method,wallet})});
+  let d=await r.json();
+  document.getElementById('withdrawStatus').innerText = d.success ? `✅ ${d.message}` : d.error;
+  if(d.success) load();
+}
+load();
+</script></body></html>
