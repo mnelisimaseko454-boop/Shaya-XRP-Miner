@@ -3,7 +3,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://js.onclckvd.com/in-stream-ad-admanager/tma.js"></script>
 <script>window.initCdTma?.({id:'472444'}).then(s=>window.show=s).catch(e=>console.log(e));</script>
-<style>body{background:#1a1a2e;color:#fff;font-family:Arial;margin:0;padding:16px}.card{background:#2a2a3e;border-radius:16px;padding:16px;margin-bottom:12px}.row{display:flex;gap:8px;margin:8px 0}.row button{flex:1}button{background:#3a3a55;color:#fff;border:none;padding:15px;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer}button.full{width:100%;margin:8px 0}.gold{background:#ffd700;color:#000}.star{background:#ffcc00;color:#000}button:disabled{opacity:.4}.small{font-size:13px;color:#aaa}input,select{width:100%;padding:12px;border-radius:10px;border:none;box-sizing:border-box;margin:8px 0}.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:99;align-items:center;justify-content:center;padding:20px}.modal>div{background:#2a2a3e;border-radius:16px;padding:20px;width:100%;max-width:380px;max-height:85vh;overflow:auto}.modal button{margin:6px 0}.lead{border-bottom:1px solid #444;padding:8px 0;display:flex;justify-content:space-between}</style></head><body>
+<style>body{background:#1a1a2e;color:#fff;font-family:Arial;margin:0;padding:16px}.card{background:#2a2a3e;border-radius:16px;padding:16px;margin-bottom:12px}.row{display:flex;gap:8px;margin:8px 0}.row button{flex:1}button{background:#3a3a55;color:#fff;border:none;padding:15px;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer}button.full{width:100%;margin:8px 0}.gold{background:#ffd700;color:#000}.star{background:#ffcc00;color:#000}button:disabled{opacity:.4}.small{font-size:13px;color:#aaa}input,select{width:100%;padding:12px;border-radius:10px;border:none;box-sizing:border-box;margin:8px 0}.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:99;align-items:center;justify-content:center;padding:20px}.modal>div{background:#2a2a3e;border-radius:16px;padding:20px;width:100%;max-width:380px;max-height:85vh;overflow:auto}.modal button{margin:6px 0}.lead{border-bottom:1px solid #444;padding:8px 0;display:flex;justify-content:space-between}.task{border-bottom:1px solid #444;padding:10px 0}</style></head><body>
 <h2 style="text-align:center">⛏️ Shaya XRP Miner</h2>
 <div class="card"><div>👤 DASHBOARD</div><br>
 <div>⬜ Available: <span id="diamonds">300</span> 💎</div>
@@ -12,7 +12,14 @@
 <div>1 XRP ~ 1.0636 $ | 1000 💎 = 1 XRP</div>
 <div>⚡ Energy: <span id="energy">100</span> / 100 | <span id="perHour">0</span>/hour</div>
 <div>👑 VIP: <span id="vip">FREE</span> | Min Withdraw: <span id="minW">2000</span> 💎</div>
+<div>🔥 Streak: <span id="streak">0</span> days | Today: +<span id="streakBonus">0</span> 💎</div>
 <div class="small" id="status"></div></div>
+
+<div class="card">
+<div>🔥 Daily Streak: <span id="streak2">0</span> days — Come back daily, bonus grows to +100 💎</div>
+<button class="full gold" onclick="openModal('tasksModal');loadTasks()">📋 Daily Tasks</button>
+</div>
+
 <div class="row"><button onclick="watchBoost()">🔥 Boost</button><button onclick="openModal('factoryModal')">⚡ Factory</button><button onclick="openModal('shopModal')">🏪 Shop</button></div>
 <div class="row"><button onclick="openOfferWall()">💎 Add</button><button onclick="doWithdraw()">📩 Withdraw</button></div>
 <button class="full star" onclick="openModal('vipModal')">👑 VIP ⭐ Buy with Stars</button>
@@ -22,29 +29,58 @@
 <button id="mineBtn" class="full gold" onclick="doMine()">⛏️ MINE +1 💎</button>
 <select id="method"><option>XRP - XRP Wallet</option><option>Dollars (USDT) - Walt</option><option>Gram - Walt</option></select>
 <input id="wallet" placeholder="Your Wallet - Walt must start with UQ...">
-<div class="small" style="text-align:center">Ads + Offers only work inside this Mini App</div>
+<div class="small" style="text-align:center">Boost = Video Ad only | Add / Extra = Offers only</div>
 
 <div id="factoryModal" class="modal"><div><h3>⚡ Factory</h3><p>Per hour: <span id="perHour2">0</span> | Auto-collects every time you open app.</p><div id="robots"></div><button class="full gold" onclick="buyFactory()">⬆️ Upgrade Factory (200 + 200/Lv)</button><button class="full" onclick="claimFactory()">💰 Claim Factory Earnings</button><button class="full" onclick="closeModals()">Close</button></div></div>
 <div id="shopModal" class="modal"><div><h3>🏪 Shop</h3><button class="full" onclick="buyShop('energy_50')">⚡ +50 Energy — 50 💎</button><button class="full" onclick="buyShop('factory')">🏭 Upgrade Factory</button><button class="full" onclick="closeModals()">Close</button></div></div>
 <div id="vipModal" class="modal"><div><h3>👑 VIP — Telegram Stars ⭐</h3><p>Current: <span id="vip2">FREE</span> | 30 days</p><button class="full star" onclick="buyVip('VIP')">VIP — 250 ⭐ | 2x Mine | 1000 Min</button><button class="full star" onclick="buyVip('VIP PRO')">VIP PRO — 500 ⭐ | 4x Mine | 1000 Min</button><button class="full star" onclick="buyVip('VIP ELITE')">VIP ELITE — 1000 ⭐ | 8x Mine | 1000 Min</button><button class="full" onclick="closeModals()">Close</button></div></div>
 <div id="leaderModal" class="modal"><div><h3>🏆 Top 10</h3><div id="leaderList">Loading...</div><button class="full" onclick="closeModals()">Close</button></div></div>
+<div id="tasksModal" class="modal"><div><h3>📋 Daily Tasks</h3><p>🔥 Streak: <span id="streak3">0</span> days</p><div id="tasksList">Loading...</div><button class="full" onclick="closeModals()">Close</button></div></div>
 
 <script>
-let diamonds=300,energy=100,perHour=0,vip='FREE',minW=2000,userId=0,username='guest',robots={};
+let diamonds=300,energy=100,perHour=0,vip='FREE',minW=2000,userId=0,username='guest',robots={},streak=0,streakBonus=0;
 if(window.Telegram?.WebApp){Telegram.WebApp.ready();const u=Telegram.WebApp.initDataUnsafe?.user;if(u){userId=u.id;username=u.username||u.first_name||'user';}}
 if(!userId){userId=Math.floor(Math.random()*1000000000);username='test_'+userId;}
 const ROBOTS={v1:{name:'Robot v1.00',energy:30,price:100},v2:{name:'Robot v2.00',energy:400,price:1000},v3:{name:'Robot v3.00',energy:2150,price:5000},v4:{name:'Robot v4.00',energy:35000,price:75000},v5:{name:'Robot v5.00',energy:100000,price:200000},v6:{name:'Robot v6.00',energy:300000,price:500000}};
 function openModal(id){document.getElementById(id).style.display='flex';}
 function closeModals(){document.querySelectorAll('.modal').forEach(m=>m.style.display='none');}
-async function load(){try{const r=await fetch('/api/user/'+userId);const d=await r.json();diamonds=d.diamonds||0;energy=d.energy??100;perHour=d.perHour||0;vip=d.vip_level||'FREE';minW=d.minWithdraw||2000;robots=d.robots||{};renderRobots();updateUI();}catch(e){updateUI();}}
-function updateUI(){document.getElementById('diamonds').innerText=diamonds;document.getElementById('xrp').innerText=(diamonds/1000).toFixed(2);document.getElementById('energy').innerText=energy;document.getElementById('perHour').innerText=perHour;document.getElementById('perHour2').innerText=perHour;document.getElementById('vip').innerText=vip;document.getElementById('vip2').innerText=vip;document.getElementById('minW').innerText=minW;const mb=document.getElementById('mineBtn');if(mb){mb.disabled=energy<=0;const mult=vip==='VIP ELITE'?8:vip==='VIP PRO'?4:vip==='VIP'?2:1;mb.innerText=energy<=0?'⛏️ NO ENERGY - Watch Boost!':'⛏️ MINE +'+mult+' 💎';}}
+async function load(){try{const r=await fetch('/api/user/'+userId);const d=await r.json();diamonds=d.diamonds||0;energy=d.energy??100;perHour=d.perHour||0;vip=d.vip_level||'FREE';minW=d.minWithdraw||2000;robots=d.robots||{};streak=d.streak||0;streakBonus=d.streakBonus||0;renderRobots();updateUI();}catch(e){updateUI();}}
+function updateUI(){
+  document.getElementById('diamonds').innerText=diamonds;
+  document.getElementById('xrp').innerText=(diamonds/1000).toFixed(2);
+  document.getElementById('energy').innerText=energy;
+  document.getElementById('perHour').innerText=perHour;
+  document.getElementById('perHour2').innerText=perHour;
+  document.getElementById('vip').innerText=vip;
+  document.getElementById('vip2').innerText=vip;
+  document.getElementById('minW').innerText=minW;
+  document.getElementById('streak').innerText=streak;
+  document.getElementById('streak2').innerText=streak;
+  document.getElementById('streak3').innerText=streak;
+  document.getElementById('streakBonus').innerText=streakBonus;
+  const mb=document.getElementById('mineBtn');if(mb){mb.disabled=energy<=0;const mult=vip==='VIP ELITE'?8:vip==='VIP PRO'?4:vip==='VIP'?2:1;mb.innerText=energy<=0?'⛏️ NO ENERGY - Watch Boost!':'⛏️ MINE +'+mult+' 💎';}
+}
 function renderRobots(){document.getElementById('robots').innerHTML=Object.keys(ROBOTS).map(k=>`<button class="full" onclick="hire('${k}')">🤖 ${ROBOTS[k].name} - ${ROBOTS[k].price} 💎 - ${ROBOTS[k].energy}/h - Owned: ${robots[k]||0}</button>`).join('');}
 async function hire(k){const r=await fetch('/api/hire',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:userId,robot:k})});const d=await r.json();if(d.success){diamonds=d.diamonds;robots=d.robots;renderRobots();load();alert('✅ Hired '+ROBOTS[k].name);}else alert(d.error);}
 async function doMine(){if(window._mining)return;window._mining=true;setTimeout(()=>window._mining=false,3000);try{const r=await fetch('/api/mine',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,username})});const d=await r.json();if(d.success){diamonds=d.diamonds;energy=d.energy;document.getElementById('status').innerText='+'+d.gain+' 💎 Mined!';}else{document.getElementById('status').innerText=d.error;if(d.energy!==undefined)energy=d.energy;}updateUI();}catch(e){document.getElementById('status').innerText='Mine failed';}}
-let adClick=0;
-async function tryOnclickA(){try{if(!window.show)return false;await window.show();return true;}catch(e){return false;}}
-async function tryGiga(){try{if(window.gigaOfferWallSDK){window.gigaOfferWallSDK.open();return true;}return false;}catch(e){return false;}}
-async function watchBoost(){document.getElementById('status').innerText='⏳ Loading Ad... Must show to earn.';adClick++;let shown=false;if(adClick%2===1){shown=await tryOnclickA();if(!shown)shown=await tryGiga();}else{shown=await tryGiga();if(!shown)shown=await tryOnclickA();}if(!shown){alert('❌ No ad available. 0 💎. Try again in 1-2 mins.');load();return;}setTimeout(async()=>{const r=await fetch('/api/boost',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:userId,adShown:true})});const d=await r.json();if(d.success){diamonds=d.diamonds;energy=d.energy;document.getElementById('status').innerText='+2 💎 Boost! +20 Energy!';}else document.getElementById('status').innerText=d.error;updateUI();},1000);}
+
+// --- FIXED BOOST: ONLY OnclickA video ad, NEVER Offerwall ---
+async function watchBoost(){
+  document.getElementById('status').innerText='⏳ Loading Ad... Must show to earn.';
+  let shown=false;
+  try{ if(window.show){ await window.show(); shown=true; } }catch(e){ shown=false; }
+  if(!shown){ alert('❌ No ad available. 0 💎. Try again in 1-2 mins.'); load(); return; }
+  try{
+    const r=await fetch('/api/boost',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:userId,adShown:true})});
+    const d=await r.json();
+    if(d.success){ diamonds=d.diamonds; energy=d.energy; document.getElementById('status').innerText='+2 💎 Boost! +20 Energy!'; }
+    else document.getElementById('status').innerText=d.error;
+    updateUI();
+  }catch(e){ document.getElementById('status').innerText='Boost failed'; }
+}
+// --- OFFERWALL: ONLY for Add / Extra ---
+function openOfferWall(){ if(window.gigaOfferWallSDK) window.gigaOfferWallSDK.open(); else alert('Offers loading... wait 5 sec'); }
+
 async function claimBonus(){const r=await fetch('/api/bonus',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:userId})});const d=await r.json();if(d.success){diamonds=d.diamonds;updateUI();alert('🎁 +50 💎 Daily Bonus!');}else alert(d.error);}
 async function buyShop(item){const r=await fetch('/api/shop-buy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,item})});const d=await r.json();if(d.success){diamonds=d.diamonds;if(d.energy!==undefined)energy=d.energy;updateUI();load();alert('✅ Bought!');}else alert(d.error);closeModals();}
 async function buyFactory(){await buyShop('factory');}
@@ -53,8 +89,27 @@ async function buyVip(level){try{const r=await fetch('/api/vip-buy',{method:'POS
 function shareInvite(){const link='https://t.me/ShayaXRPMinerBot?start=ref_'+userId;if(navigator.clipboard)navigator.clipboard.writeText(link);alert('Invite link copied:\n'+link);}
 async function doWithdraw(){const wallet=document.getElementById('wallet').value.trim();const method=document.getElementById('method').value;if(!wallet)return alert('Enter wallet first');if(diamonds<minW)return alert('Min Withdraw '+minW+' 💎. You have '+diamonds);const r=await fetch('/api/withdraw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:userId,method,wallet})});const d=await r.json();if(d.success){diamonds=0;updateUI();alert(d.message);}else alert(d.error);}
 async function loadLeader(){try{const r=await fetch('/api/leaderboard');const d=await r.json();document.getElementById('leaderList').innerHTML=d.map((u,i)=>`<div class="lead"><span>#${i+1} @${u.username||u.first_name||'Player'}</span><span>${u.diamonds} 💎</span></div>`).join('')||'No players yet';}catch(e){document.getElementById('leaderList').innerText='Failed to load';}}
+
+// --- TASKS + STREAK ---
+async function loadTasks(){
+  try{
+    const r=await fetch('/api/tasks/'+userId);const d=await r.json();
+    streak=d.userStreak||streak; updateUI();
+    if(!d.tasks || !d.tasks.length){ document.getElementById('tasksList').innerHTML='No tasks yet. Run SQL for tasks table.'; return; }
+    document.getElementById('tasksList').innerHTML=d.tasks.map(t=>`
+      <div class="task"><b>${t.title}</b><br>+${t.reward} 💎 — ${t.done?'✅ Done':'⏳ Not done'}
+      <button class="full" ${t.done?'disabled':''} onclick="claimTask('${t.id}')">${t.done?'Claimed':'Claim'}</button>
+      ${t.link?`<button class="full" onclick="window.open('${t.link}','_blank')">Open Link</button>`:''}
+      </div>`).join('');
+  }catch(e){ document.getElementById('tasksList').innerText='Failed to load tasks'; }
+}
+async function claimTask(id){
+  const r=await fetch('/api/tasks/claim',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId, taskId:id})});
+  const d=await r.json();
+  if(d.success){ diamonds=d.diamonds; updateUI(); alert('✅ +'+d.reward+' 💎 Task done!'); loadTasks(); } else alert(d.error);
+}
+
 load();setInterval(()=>{if(energy<100){energy++;updateUI();}},60000);
 document.addEventListener('DOMContentLoaded',()=>{const s=document.createElement('script');s.src='https://wall.giga.pub/api/v1/loader.js?projectId=9127';s.async=true;document.head.appendChild(s);});
 (window.loadGigaSDKCallbacks||(window.loadGigaSDKCallbacks=[])).push(()=>{window.loadOfferWallSDK({projectId:'9127'}).then(sdk=>{window.gigaOfferWallSDK=sdk;sdk.on('rewardClaim',async(data)=>{const r=await fetch('/api/add-diamonds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,username,amount:Number(data.amount||0),source:'offerwall',rewardId:String(data.rewardId)})});const d=await r.json();if(d.success){try{sdk.confirmReward(data.rewardId,data.hash);}catch(e){}diamonds=d.newBalance;updateUI();alert('+'+data.amount+' 💎 Offer!');}});}).catch(e=>console.log(e));});
-function openOfferWall(){if(window.gigaOfferWallSDK)window.gigaOfferWallSDK.open();else alert('Offers loading... wait 5 sec');}
 </script></body></html>
