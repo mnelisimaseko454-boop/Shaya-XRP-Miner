@@ -1,9 +1,28 @@
-// --- TELEGRAM BOT ---
+const express = require('express');
+const cors = require('cors');
+const { createClient } = require('@supabase/supabase-js');
+const path = require('path');
 const TelegramBot = require('node-telegram-bot-api');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.static(__dirname));
+
+// --- SUPABASE FROM RENDER ENVIRONMENT ---
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const BOT_TOKEN = process.env.BOT_TOKEN;
-let bot = null;
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  console.log('⚠️ WARNING: SUPABASE_URL or SUPABASE_ANON_KEY missing');
+}
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// --- TELEGRAM BOT ---
 if (BOT_TOKEN) {
-  bot = new TelegramBot(BOT_TOKEN, { polling: true });
+  const bot = new TelegramBot(BOT_TOKEN, { polling: true });
   bot.onText(/\/start/, (msg) => {
     bot.sendMessage(msg.chat.id, `⛏️ Welcome to Shaya XRP Miner!\n\nMine Diamonds, Watch Ads, Complete Offers and Claim XRP.\n\n1000 💎 = 1 XRP`, {
       reply_markup: {
@@ -17,27 +36,6 @@ if (BOT_TOKEN) {
 } else {
   console.log('⚠️ BOT_TOKEN missing - bot will not reply to /start');
 }
-const express = require('express');
-const cors = require('cors');
-const { createClient } = require('@supabase/supabase-js');
-const path = require('path');
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(express.static(__dirname));
-
-// --- SUPABASE FROM RENDER ENVIRONMENT ---
-// You added these in Render -> Environment:
-// SUPABASE_URL + SUPABASE_ANON_KEY
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.log('⚠️ WARNING: SUPABASE_URL or SUPABASE_ANON_KEY missing in Render Environment');
-}
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // --- Serve frontend ---
 app.get('/', (req, res) => {
@@ -52,13 +50,12 @@ app.get('/api/user/:id', async (req, res) => {
   } catch (e) { res.json({ diamonds: 0 }); }
 });
 
-// --- Add Diamonds (Mine / Boost / Offerwall) ---
+// --- Add Diamonds ---
 app.post('/api/add-diamonds', async (req, res) => {
   try {
     const { userId, username, amount, source, rewardId } = req.body;
     if (!userId || !amount) return res.json({ success: false, error: 'Missing data' });
 
-    // Prevent double-credit for same Giga reward
     if (rewardId) {
       const { data: exists } = await supabase.from('rewards_log').select('id').eq('reward_id', rewardId).single();
       if (exists) return res.json({ success: false, error: 'Already credited' });
