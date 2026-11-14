@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Shaya Admin</title>
+<style>body{background:#111;color:#fff;font-family:Arial;padding:16px}input,button{padding:12px;border-radius:10px;border:none;margin:4px}button{background:#ffd700;font-weight:bold;cursor:pointer}.card{background:#222;padding:14px;border-radius:12px;margin:10px 0}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #444;padding:8px;text-align:left;font-size:13px}.pay{background:#2ecc71}.rej{background:#e74c3c}.app{background:#3498db}</style></head><body>
+<h2>🛡️ Shaya Admin Panel</h2>
+<div id="login"><input id="key" placeholder="Admin Secret (ADMIN_SECRET)"><button onclick="loadData()">Login</button><p>Set ADMIN_SECRET in Render. Default: shaya123 — change it!</p></div>
+<div id="panel" style="display:none">
+<div class="card" id="stats"></div>
+<h3>📩 Withdraws</h3><div class="card"><table><thead><tr><th>ID</th><th>User</th><th>XRP</th><th>Wallet</th><th>Status</th><th>Action</th></tr></thead><tbody id="wd"></tbody></table></div>
+<h3>👥 Top Users</h3><div class="card"><table><thead><tr><th>User</th><th>💎</th><th>VIP</th><th>Streak</th><th>Paid Out</th></tr></thead><tbody id="users"></tbody></table></div>
+</div>
+<script>
+let KEY='';
+async function loadData(){KEY=document.getElementById('key').value;const r=await fetch('/api/admin/data?key='+KEY);const d=await r.json();if(d.error)return alert(d.error);document.getElementById('login').style.display='none';document.getElementById('panel').style.display='block';document.getElementById('stats').innerHTML=`👥 Users: ${d.stats.totalUsers} | 👑 VIP: ${d.stats.vipUsers} | 💎 In circulation: ${d.stats.totalDiamonds} | ✅ Paid: ${d.stats.totalPaid.toFixed(2)} XRP | ⏳ Pending: ${d.stats.totalPending.toFixed(2)} XRP`;
+document.getElementById('wd').innerHTML=d.withdraws.map(w=>`<tr><td>#${w.id}</td><td>@${w.username||w.user_id}</td><td>${w.xrp.toFixed(2)}</td><td>${w.wallet}</td><td>${w.status}</td><td>${w.status==='paid'||w.status==='rejected'?'—':`<button class="app" onclick="act(${w.id},'approve')">Approve</button> <button class="pay" onclick="act(${w.id},'pay')">I Paid</button> <button class="rej" onclick="act(${w.id},'reject')">Reject</button>`}</td></tr>`).join('')||'<tr><td>No withdraws</td></tr>';
+document.getElementById('users').innerHTML=d.users.slice(0,50).map(u=>`<tr><td>@${u.username||u.first_name||u.id}</td><td>${u.diamonds}</td><td>${u.vip_level}</td><td>🔥${u.streak||0}</td><td>${(u.paid_out||0).toFixed(2)}</td></tr>`).join('');}
+async function act(id,action){const r=await fetch('/api/admin/withdraw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:KEY,id,action})});const d=await r.json();if(d.success)loadData();else alert(d.error);}
+</script></body></html>
