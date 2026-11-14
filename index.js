@@ -1,3 +1,22 @@
+// --- TELEGRAM BOT ---
+const TelegramBot = require('node-telegram-bot-api');
+const BOT_TOKEN = process.env.BOT_TOKEN;
+let bot = null;
+if (BOT_TOKEN) {
+  bot = new TelegramBot(BOT_TOKEN, { polling: true });
+  bot.onText(/\/start/, (msg) => {
+    bot.sendMessage(msg.chat.id, `⛏️ Welcome to Shaya XRP Miner!\n\nMine Diamonds, Watch Ads, Complete Offers and Claim XRP.\n\n1000 💎 = 1 XRP`, {
+      reply_markup: {
+        inline_keyboard: [[
+          { text: '⛏️ OPEN MINER', web_app: { url: 'https://shaya-xrp-miner.onrender.com' } }
+        ]]
+      }
+    });
+  });
+  console.log('Telegram Bot polling started');
+} else {
+  console.log('⚠️ BOT_TOKEN missing - bot will not reply to /start');
+}
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
